@@ -1,0 +1,28 @@
+# cloud-config
+# vim: syntax=yaml
+ssh_pwauth: true
+fqdn: display-one.ghr.lan
+users:
+  - name: jujhar
+    shell: /bin/bash
+    lock_passwd: true
+    ssh_import_id:
+        - gh:jujhars13
+    sudo: [ "ALL=(ALL) NOPASSWD:ALL" ]
+    groups: [ systemd-journal, adm, sudo ]
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEAxQCywIBr50F0tKiyQEbEnp3rcqqNe2lDkMG1rZG4w/CRQkXAYnKZZSeOgZlWDbMq3Q7IIu25eMhXbUlhD6ppXsN/qUH7e+HXJZc0pluta146oYGaUrunO679UzuvFBSVhi5NfnXi+svJVoefTzQvbW1LPYjIqXHpkWn/5pbTVgU= jujhar@jujhar.com
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGGakkE8UR+O7GThbvNfQeV8UWHBRHxQrFu2FgPGNLFE root@sevak
+package_update: true
+package_upgrade: true
+packages:
+  - htop
+  - vim
+  - tmux
+  - git
+runcmd:
+  - echo -e "\ninfo $(date +%F_%H-%M-%S) starting cloud-init user data"
+  - timedatectl set-timezone Europe/London
+  - printf "ubuntu-host-$(openssl rand -hex 3)" > /etc/hostname
+  - printf "Ubuntu 24 LTS \nIP - $(hostname -I)\n" > /etc/issue
+  - echo -e "info $(date +%F_%H-%M-%S) Finished cloud-init user data\n"
