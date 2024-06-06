@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/vim,visualstudiocode,node
 # Edit at https://www.toptal.com/developers/gitignore?templates=vim,visualstudiocode,node
 
+*.xz
+*.iso
+
 ### Node ###
 # Logs
 logs
