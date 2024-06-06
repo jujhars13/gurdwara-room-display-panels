@@ -13,12 +13,12 @@ Ubuntu 24
 export URL="https://www.mirrorservice.org/sites/cdimage.ubuntu.com/cdimage/noble/daily-preinstalled/current/noble-preinstalled-desktop-arm64+raspi.img.xz"
 curl -O $URL
 
-export ISO=(basename $URL)
+export ISO_IMAGE=$(basename $URL)
 
 # REPLACE WITH YOUR USB (`lsblk`)
 export USB="/dev/sdc"
 # `-d` decompress `<` redirect $FILE contents to expand `|` sending the output to `dd` to copy directly to $USB
-xz -d < $ISO | sudo dd bs=100M of=$USB status=progress
+xz -d < $ISO_IMAGE | sudo dd bs=100M of=$USB status=progress
 
 # make a directory to mount the USB to
 mkdir /tmp/pi-disk
@@ -32,11 +32,24 @@ envsubst < wpa_supplicant.conf  > /tmp/pi-disk/wpa_supplicant.conf
 # create a cloud-init user-data file
 < cloud-init.yaml > /tmp/pi-disk/user-data
 
+# enable Elcrow 7" display params via "bios" 
+# @see https://www.amazon.co.uk/dp/B07H79XMLT?psc=1&ref=ppx_yo2ov_dt_b_product_details
+echo "
+# Get the Elcrow 7" screen workong on pi
+hdmi_force_hotplug=1
+max_usb_current=1
+hdmi_group=2
+hdmi_mode-1
+hdmi_mode=87
+hdmi_cvr 1024 600 60 6 0 0 0
+hdmi_drive=1
+" >> /tmp/pi-disk/config.txt
+
 # enable ssh
 touch /tmp/pi-disk/ssh
 
-# safely unmount 
-sudo umount "${USB}
+# safely unmount
+sudo umount "${USB}1"
 sudo eject "${USB}"
 
 ```
