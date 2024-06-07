@@ -1,28 +1,48 @@
-# cloud-config
+#cloud-config
 # vim: syntax=yaml
-ssh_pwauth: true
+hostname: display-one
 fqdn: display-one.ghr.lan
+manage_etc_hosts: true
+locale: en_GB.UTF-8
+timezone: Europe/London
+
+# Enable password authentication with the SSH daemon
+ssh_pwauth: true
+
 users:
+  - default
   - name: jujhar
     shell: /bin/bash
-    lock_passwd: true
+    #passwd: "$6$MBp7Ay3DdGtqzLsI$.G3zVcAsrBtl5Yum4LTNEStOPT.l8A1ORHuDKI5oP.0f545venZYl0ZeMGZ2VbVyrzr9IswDr7WY4Q8gifY001"
     ssh_import_id:
-        - gh:jujhars13
-    sudo: [ "ALL=(ALL) NOPASSWD:ALL" ]
-    groups: [ systemd-journal, adm, sudo ]
+      - gh:jujhars13
+    lock_passwd: true
+    sudo: "ALL=(ALL) NOPASSWD:ALL"
+    groups: sudo
     ssh_authorized_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEAxQCywIBr50F0tKiyQEbEnp3rcqqNe2lDkMG1rZG4w/CRQkXAYnKZZSeOgZlWDbMq3Q7IIu25eMhXbUlhD6ppXsN/qUH7e+HXJZc0pluta146oYGaUrunO679UzuvFBSVhi5NfnXi+svJVoefTzQvbW1LPYjIqXHpkWn/5pbTVgU= jujhar@jujhar.com
       - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGGakkE8UR+O7GThbvNfQeV8UWHBRHxQrFu2FgPGNLFE root@sevak
 package_update: true
 package_upgrade: true
+apt:
+  conf: |
+    Acquire {
+      Check-Date "false";
+    };
 packages:
+  - avahi-daemon
   - htop
   - vim
   - tmux
   - git
+  - ubuntu-gnome-desktop
 runcmd:
   - echo -e "\ninfo $(date +%F_%H-%M-%S) starting cloud-init user data"
-  - timedatectl set-timezone Europe/London
+  - localectl set-x11-keymap "gb" pc105
+  - setupcon -k --force || true
   - printf "ubuntu-host-$(openssl rand -hex 3)" > /etc/hostname
   - printf "Ubuntu 24 LTS \nIP - $(hostname -I)\n" > /etc/issue
   - echo -e "info $(date +%F_%H-%M-%S) Finished cloud-init user data\n"
+
+power_state:
+  mode: reboot
