@@ -3,6 +3,7 @@
 
 *.xz
 *.iso
+*.img
 
 ### Node ###
 # Logs

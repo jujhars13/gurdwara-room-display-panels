@@ -1,3 +1,29 @@
+#!/bin/bash
+set -e
+
+apt-get update -y && apt-get upgrade -y
+apt-get install -y \
+  avahi-daemon \
+  cloud-init \
+  htop \
+  tmux \
+  git \
+  vim 
+
+cat -> /boot/wpa_supplicant.conf <<'EOF'
+country=gb
+update_config=1
+ctrl_interface=/var/run/wpa_supplicant
+
+# use envsubst to replace these values
+network={
+    scan_ssid=1
+    ssid="$WIFI_SSID"
+    psk="$WIFI_PASSWORD"
+}
+EOF
+
+cat - > /boot/user-data <<'EOF'
 #cloud-config
 # vim: syntax=yaml
 hostname: display-one
@@ -30,21 +56,18 @@ apt:
       Check-Date "false";
     };
 packages:
-  - avahi-daemon
-  - firefox
-  - fonts-guru-extra
-  - git
-  - htop
-  - tmux
-  - vim
-  - xfdesktop4
 runcmd:
   - echo -e "\ninfo $(date +%F_%H-%M-%S) starting cloud-init user data"
   - localectl set-x11-keymap "gb" pc105
   - setupcon -k --force || true
   - printf "ubuntu-host-$(openssl rand -hex 3)" > /etc/hostname
   - printf "Ubuntu 24 LTS \nIP - $(hostname -I)\n" > /etc/issue
+  - echo "chromium-brower --kiosk jujhar.com" >> /home/pi/.config/lxsession/LXDE-pi/autostart
   - echo -e "info $(date +%F_%H-%M-%S) Finished cloud-init user data\n"
 
 power_state:
   mode: reboot
+EOF
+
+# Disable dhcpcd - it has a conflict with cloud-init network config
+# systemctl mask dhcpcd
