@@ -1,19 +1,29 @@
-# gurdwara-room-display-panels
-Simple RasPI setup for Gurdwaras to use outside their darbaar/room bookings
+# Rsbuild Project
 
-## TODO
+## Setup
 
-- Provision RasPi with cloud-init
-    - setup unnatended upgrades
-    - setup autologin to browser in kiosk mode
-    - setup daily reboot
-    - setup login deets
-- Write page
-    - Hello world
-    - create google sheet
-    - Wire up page to google sheet
-- CI 
-    - Deploy page to a domain
-- documentation
-    - README.md
+Install the dependencies:
 
+```bash
+pnpm install
+```
+
+## Get Started
+
+Start the dev server:
+
+```bash
+pnpm dev
+```
+
+Build the app for production:
+
+```bash
+pnpm build
+```
+
+Preview the production build locally:
+
+```bash
+pnpm preview
+```
