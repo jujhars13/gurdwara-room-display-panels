@@ -43,3 +43,35 @@ body {
   height: 100%;
   z-index: -1;
 }
+
+p#eventType {
+  font-size: 1.8rem;
+  animation: text 2s steps(28),
+    effect 0.5s steps(1) infinite alternate;
+  font-family: monospace;
+  border-right: 3px solid;
+  width: 22ch;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+#typing-effect-container {
+  display: flex;
+  height: 10vh;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+@keyframes text {
+  0% {
+    width: 0;
+  }
+}
+
+@keyframes effect {
+  50% {
+    border-color: #0000;
+  }
+}
