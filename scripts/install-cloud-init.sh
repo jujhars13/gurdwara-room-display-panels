@@ -22,48 +22,6 @@ apt-get install -y \
 # raspi-config
 # -> autologin as pi user
 # edit wayfire config
-cat - >/home/pi/.config/wayfire.ini <<'EOF'
-[autostart]
-panel = wfrespawn wf-panel-pi
-background = wfrespawn pcmanfm --desktop --profile LXDE-pi
-xdg-autostart = lxsession-xdg-autostart
-chromium = chromium-browser https://gurdwararoomdisplays.jujhar.com/?source=1USbXftm2RqLJ90Pj-PACVKxpsvdTvVOg3xnlNWAFgKA&screen=1&colourscheme=light https://gurdwararoomdisplays.jujhar.com/?source=1USbXftm2RqLJ90Pj-PACVKxpsvdTvVOg3xnlNWAFgKA&screen=1&colourscheme=dark --kiosk --noerrdialogs --disable-infobars --no-first-run --ozone-platform=wayland --enable-features=OverlayScrollbar --start-maximized
-switchtab = bash ~/switchtab.sh
-screensaver = false
-dpms = false
-EOF
-
-cat - >/home/pi/switchtab.sh <<'EOF'
-#!/bin/bash
-
-# Find Chromium browser process ID
-chromium_pid=$(pgrep chromium | head -1)
-
-# Check if Chromium is running
-while
-[
-[ -z $chromium_pid ]]; do
-  echo "Chromium browser is not running yet."
-  sleep 5
-  chromium_pid=$(pgrep chromium | head -1)
-done
-
-echo "Chromium browser process ID: $chromium_pid"
-
-export XDG_RUNTIME_DIR=/run/user/1000
-
-# Loop to send keyboard events
-while true; do
-  # Send Ctrl+Tab using `wtype` command
-  wtype -M ctrl -P Tab
-
-  # Send Ctrl+Tab using `wtype` command
-  wtype -m ctrl -p Tab
-
-  sleep 10
-done
-EOF
-
 cat - >/boot/wpa_supplicant.conf <<'EOF'
 country=gb
 update_config=1
@@ -133,6 +91,63 @@ EOF
 
 # disable bluetooth
 echo "dtoverlay=disable-bt" >>/boot/firmware/config.txt
+
+# enable Elcrow 7" display params via "bios"
+# @see https://www.amazon.co.uk/dp/B07H79XMLT?psc=1&ref=ppx_yo2ov_dt_b_product_details
+# otherwise USB bus on PI is not enough to power the display
+echo "
+hdmi_force_hotplug=1
+max_usb_current=1
+hdmi_group=2
+hdmi_mode-1
+hdmi_mode=87
+hdmi_cvr 1024 600 60 6 0 0 0
+hdmi_drive=1
+" >>/boot/firmware/config.txt
+
+# setup kiosk mode
+mkdir -p /home/pi/.config/
+cat - >/home/pi/.config/wayfire.ini <<'EOF'
+[autostart]
+panel = wfrespawn wf-panel-pi
+background = wfrespawn pcmanfm --desktop --profile LXDE-pi
+xdg-autostart = lxsession-xdg-autostart
+chromium = chromium-browser https://gurdwararoomdisplays.jujhar.com/?source=2PACX-1vTyKxo6YZo0vBJ1Z0ZXItkC1IEs4I8B8Xc178KcSW461qwxfnEyzqcXuU_cY1iVc3ShNPW3oQYPFFrz&screen=1&colourscheme=light https://gurdwararoomdisplays.jujhar.com/?source=2PACX-1vTyKxo6YZo0vBJ1Z0ZXItkC1IEs4I8B8Xc178KcSW461qwxfnEyzqcXuU_cY1iVc3ShNPW3oQYPFFrz&screen=1&colourscheme=dark --kiosk --noerrdialogs --disable-infobars --no-first-run --ozone-platform=wayland --enable-features=OverlayScrollbar --start-maximized
+switchtab = bash ~/switchtab.sh
+screensaver = false
+dpms = false
+EOF
+
+cat - >/home/pi/switchtab.sh <<'EOF'
+#!/bin/bash
+
+# Find Chromium browser process ID
+chromium_pid=$(pgrep chromium | head -1)
+
+# Check if Chromium is running
+while
+[
+[ -z $chromium_pid ]]; do
+  echo "Chromium browser is not running yet."
+  sleep 5
+  chromium_pid=$(pgrep chromium | head -1)
+done
+
+echo "Chromium browser process ID: $chromium_pid"
+
+export XDG_RUNTIME_DIR=/run/user/1000
+
+# Loop to send keyboard events
+while true; do
+  # Send Ctrl+Tab using `wtype` command
+  wtype -M ctrl -P Tab
+
+  # Send Ctrl+Tab using `wtype` command
+  wtype -m ctrl -p Tab
+
+  sleep 10
+done
+EOF
 
 ## TODO turn machine display off at night
 ## TODO turn machine display on in morning
