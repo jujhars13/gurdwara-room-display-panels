@@ -8,9 +8,63 @@ apt-get install -y \
   htop \
   tmux \
   git \
-  vim 
+  unattended-upgrades \
+  wtype \
+  vim
 
-cat -> /boot/wpa_supplicant.conf <<'EOF'
+# otherwise next command will wait for imput and hang
+# echo "debconf debconf/frontend select noninteractive" | sudo debconf-set-selections
+# dpkg-reconfigure --priority=low unattended-upgrades
+
+# for kiosk mode
+# @see https://www.raspberrypi.com/tutorials/how-to-use-a-raspberry-pi-in-kiosk-mode/
+# wtype simulates keyboard input
+# raspi-config
+# -> autologin as pi user
+# edit wayfire config
+cat - >/home/pi/.config/wayfire.ini <<'EOF'
+[autostart]
+panel = wfrespawn wf-panel-pi
+background = wfrespawn pcmanfm --desktop --profile LXDE-pi
+xdg-autostart = lxsession-xdg-autostart
+chromium = chromium-browser https://gurdwararoomdisplays.jujhar.com/?source=1USbXftm2RqLJ90Pj-PACVKxpsvdTvVOg3xnlNWAFgKA&screen=1&colourscheme=light https://gurdwararoomdisplays.jujhar.com/?source=1USbXftm2RqLJ90Pj-PACVKxpsvdTvVOg3xnlNWAFgKA&screen=1&colourscheme=dark --kiosk --noerrdialogs --disable-infobars --no-first-run --ozone-platform=wayland --enable-features=OverlayScrollbar --start-maximized
+switchtab = bash ~/switchtab.sh
+screensaver = false
+dpms = false
+EOF
+
+cat - >/home/pi/switchtab.sh <<'EOF'
+#!/bin/bash
+
+# Find Chromium browser process ID
+chromium_pid=$(pgrep chromium | head -1)
+
+# Check if Chromium is running
+while
+[
+[ -z $chromium_pid ]]; do
+  echo "Chromium browser is not running yet."
+  sleep 5
+  chromium_pid=$(pgrep chromium | head -1)
+done
+
+echo "Chromium browser process ID: $chromium_pid"
+
+export XDG_RUNTIME_DIR=/run/user/1000
+
+# Loop to send keyboard events
+while true; do
+  # Send Ctrl+Tab using `wtype` command
+  wtype -M ctrl -P Tab
+
+  # Send Ctrl+Tab using `wtype` command
+  wtype -m ctrl -p Tab
+
+  sleep 10
+done
+EOF
+
+cat - >/boot/wpa_supplicant.conf <<'EOF'
 country=gb
 update_config=1
 ctrl_interface=/var/run/wpa_supplicant
@@ -23,7 +77,7 @@ network={
 }
 EOF
 
-cat - > /boot/user-data <<'EOF'
+cat - >/boot/user-data <<'EOF'
 #cloud-config
 # vim: syntax=yaml
 hostname: display-one
@@ -62,7 +116,7 @@ runcmd:
   - setupcon -k --force || true
   - printf "ubuntu-host-$(openssl rand -hex 3)" > /etc/hostname
   - printf "Ubuntu 24 LTS \nIP - $(hostname -I)\n" > /etc/issue
-  - echo "chromium-brower --kiosk jujhar.com" >> /home/pi/.config/lxsession/LXDE-pi/autostart
+  #- echo "chromium-brower --kiosk jujhar.com" >> /home/pi/.config/lxsession/LXDE-pi/autostart
   - echo -e "info $(date +%F_%H-%M-%S) Finished cloud-init user data\n"
 
 power_state:
@@ -71,3 +125,15 @@ EOF
 
 # Disable dhcpcd - it has a conflict with cloud-init network config
 # systemctl mask dhcpcd
+
+# to disable USB ports
+# echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/unbind
+# to re-enable usb ports
+# echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/bind
+
+# disable bluetooth
+echo "dtoverlay=disable-bt" >>/boot/firmware/config.txt
+
+## TODO turn machine display off at night
+## TODO turn machine display on in morning
+## TODO disable write mode for SD card to increase longevity
