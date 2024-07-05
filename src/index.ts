@@ -25,7 +25,7 @@ if (!content) {
     date: new Date().toLocaleDateString()
   };
 }
-document.title = `${content.screenNumber}: Display panel`;
+document.title = `${content?.screenNumber}: Display panel`;
 
 const contentDiv = document.createElement("div");
 contentDiv.id = "content";
