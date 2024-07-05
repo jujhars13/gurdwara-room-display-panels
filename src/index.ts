@@ -44,9 +44,9 @@ if (content?.image) {
   image = content.image;
 } else {
   const randomIndex = Math.floor(
-    Math.random() * eventType[`${content?.type}`].images.length
+    Math.random() * eventType[`${content?.eventType}`].images.length
   );
-  image = eventType[`${content?.type}`].images[randomIndex];
+  image = eventType[`${content?.eventType}`].images[randomIndex];
 }
 imageElement.style.backgroundImage = `url(${image})`;
 
