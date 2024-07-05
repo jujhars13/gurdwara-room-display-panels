@@ -45,12 +45,12 @@ body {
 }
 
 p#eventType {
-  font-size: 1.8rem;
+  font-size: 2.8rem;
   animation: text 2s steps(28),
     effect 0.5s steps(1) infinite alternate;
   font-family: monospace;
   border-right: 3px solid;
-  width: 22ch;
+  width: 14ch;
   overflow: hidden;
   white-space: nowrap;
 }

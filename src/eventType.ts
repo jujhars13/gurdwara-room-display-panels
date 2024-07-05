@@ -28,7 +28,7 @@ const eventType = {
     images: ["https://kaurlife.org/wp-content/uploads/2014/12/n.jpg"]
   },
   Workshop: {
-    images: ["https://kaurlife.org/wp-content/uploads/2014/12/n.jpg"]
+    images: ["static/images/workshop_01.avif", "static/images/workshop_02.jpg"]
   },
   Party: { images: ["https://kaurlife.org/wp-content/uploads/2014/12/n.jpg"] },
   "Birthday Party": {
