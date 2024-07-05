@@ -75,3 +75,10 @@ p#eventType {
     border-color: #0000;
   }
 }
+
+.error {
+  color: #ff0000;
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-top: 1rem;
+}

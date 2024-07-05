@@ -2,6 +2,10 @@ import "./index.css";
 import { display } from "./display";
 import { eventType } from "./eventType";
 
+const contentDiv = document.createElement("div");
+contentDiv.id = "content";
+contentDiv.className = "content";
+
 // Get screen and source from GET params in the URL - set defaults if not passed in
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -15,6 +19,7 @@ try {
   if (source !== null && screen !== null) {
     content = await display.getContent(source, parseInt(screen));
   } else {
+    contentDiv!.innerHTML = `<div class="error">Error: source or screenId not passed in</div>`;
     throw new Error("source or screenId not passed in");
   }
 } catch (e) {
@@ -27,13 +32,10 @@ if (!content) {
     date: new Date().toLocaleDateString()
   };
 }
+
 document.title = `${content?.screenNumber}: Display panel`;
 
-const contentDiv = document.createElement("div");
-contentDiv.id = "content";
-contentDiv.className = "content";
-
-// use image if supplied, otherwise use default image
+// use bg image if supplied, otherwise use default image
 const imageElement = document.createElement("div");
 imageElement.id = "background-image";
 // if no image has been sent
