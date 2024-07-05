@@ -35,9 +35,11 @@ contentDiv.className = "content";
 const imageElement = document.createElement("div");
 imageElement.id = "background-image";
 // if no image has been sent
-let image = eventType["default"].img;
+let image = eventType["default"].images[0];
 if (content?.image) {
   image = content.image;
+} else {
+  image = eventType[`${content?.type}`].images[0];
 }
 imageElement.style.backgroundImage = `url(${image})`;
 
