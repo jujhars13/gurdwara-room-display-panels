@@ -1,5 +1,6 @@
 import "./index.css";
 import { display } from "./display";
+import { eventType } from "./eventType";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -30,9 +31,19 @@ const contentDiv = document.createElement("div");
 contentDiv.id = "content";
 contentDiv.className = "content";
 
+// use image if supplied, otherwise use default image
+const imageElement = document.createElement("div");
+imageElement.id = "background-image";
+// if no image has been sent
+let image = eventType["default"].img;
+if (content?.image) {
+  image = content.image;
+}
+imageElement.style.backgroundImage = `url(${image})`;
+
 contentDiv!.innerHTML = `
   <p id='date'>${content?.date}</p>
-  <div id='background-image' style='background-image: url(${content?.image});'></div>
+  ${imageElement.outerHTML}
   <p id='type'>${content?.type}</p>
   <h1 id='title'>${content?.title}</h1>
   <h2 id='subtitle'>${content?.subtitle}</h2>

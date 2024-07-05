@@ -34,6 +34,9 @@ body {
 #background-image {
   opacity: 0.22;
   position: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   top: 0;
   left: 0;
   width: 100%;
