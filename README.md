@@ -27,3 +27,9 @@ Preview the production build locally:
 ```bash
 pnpm preview
 ```
+
+## TODO
+
+- [ ] get better domain name
+- [ ] get more images in
+- [ ] get some sort of test default showing if sheet url not supplied
