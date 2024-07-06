@@ -40,19 +40,23 @@ const imageElement = document.createElement("div");
 imageElement.id = "background-image";
 // if no image has been sent
 let image = eventType["default"].images[0];
+
 if (content?.image) {
   image = content.image;
 } else {
-  const randomIndex = Math.floor(
-    Math.random() * eventType[`${content?.eventType}`].images.length
-  );
-  image = eventType[`${content?.eventType}`].images[randomIndex];
+  if (eventType[`${content?.eventType}`]?.images) {
+    const randomIndex = Math.floor(
+      Math.random() * eventType[`${content?.eventType}`].images.length
+    );
+    image = eventType[`${content?.eventType}`].images[randomIndex];
+  }
 }
 imageElement.style.backgroundImage = `url(${image})`;
 
 contentDiv!.innerHTML = `
-  <p id='date'>${content?.date}</p>
   ${imageElement.outerHTML}
+  <div id='roomName'>${content.roomName}</div>
+  <p id='date'>${content?.date}</p>
   <div id="typing-effect-container"><p id='eventType'>${content?.eventType}</p></div>
   <h1 id='title' class='typing-effect'>${content?.title}</h1>
   <h2 id='subtitle'>${content?.subtitle}</h2>

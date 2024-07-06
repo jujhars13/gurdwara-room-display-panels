@@ -24,6 +24,19 @@ const eventType = {
       "static/images/santhya_03.webp"
     ]
   },
+  Langar: {
+    images: [
+      "static/images/langar_01.jpg",
+      "static/images/langar_02.jpg",
+      "static/images/langar_03.jpg",
+      "static/images/langar_04.jpg",
+      "static/images/langar_05.jpg",
+      "static/images/langar_06.webp",
+      "static/images/langar_07.jpg",
+      "static/images/langar_08.jpg",
+      "static/images/langar_09.jpg"
+    ]
+  },
   "Keertan Class": {
     images: ["https://kaurlife.org/wp-content/uploads/2014/12/n.jpg"]
   },

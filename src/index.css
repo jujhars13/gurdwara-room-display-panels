@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  padding: 0px 20px 0px 20px;
   color: #fff;
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   background-image: linear-gradient(to bottom, #020917, #101725);
@@ -42,6 +43,14 @@ body {
   width: 100%;
   height: 100%;
   z-index: -1;
+}
+
+div#roomName {
+  font-size: 1.8rem;
+  text-align: right;
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 
 p#eventType {
