@@ -2,15 +2,22 @@
 set -e
 
 apt-get update -y && apt-get upgrade -y
-apt-get install -y \
+apt-get install -y --no-install-recommends \
   avahi-daemon \
   cloud-init \
+  curl \
+  fbi \
+  git \
   htop \
   tmux \
-  git \
   unattended-upgrades \
+  vim \
   wtype \
-  vim
+  x11-xserver-utils \
+  xinit \
+  xserver-xorg-core \
+  xserver-xorg-input-all \
+  xserver-xorg-video-all
 
 # otherwise next command will wait for imput and hang
 # echo "debconf debconf/frontend select noninteractive" | sudo debconf-set-selections
