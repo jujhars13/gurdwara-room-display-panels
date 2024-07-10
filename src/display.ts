@@ -7,7 +7,7 @@ const display = {
    * @param screenId the screen ID
    * @returns the content for the screen
    */
-  getContent: async (googleSheetId: string, screenId: number) => {
+  getContent: async (googleSheetId: string, screenId: number): Promise<any> => {
     const rawSheet = await fetch(
       `https://docs.google.com/spreadsheets/d/e/${googleSheetId}/pub?gid=0&single=true&output=csv`
     );

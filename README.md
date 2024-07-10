@@ -31,8 +31,8 @@ pnpm preview
 ## TODO
 
 - [ ] get better domain name
-- [ ] get more images in, use an array per entry to keep things fresh
-- [ ] get some sort of test default showing if sheet url not supplied
-- [ ] add some animation to page to keep things active
+- [x] get more images in, use an array per entry to keep things fresh
+- [x] get some sort of test default showing if sheet url not supplied
+- [x] add some animation to page to keep things active
 - [ ] figure out how to prevent screen burn in
 - [ ] add gurdwara logo in onto page
