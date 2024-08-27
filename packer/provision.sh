@@ -114,7 +114,7 @@ hdmi_drive=1
 
 # setup kiosk mode
 mkdir -p /home/pi/.config/
-cat - >/home/pi/.config/wayfire.ini <<'EOF'
+cat - >>/home/pi/.config/wayfire.ini <<'EOF'
 [autostart]
 panel = wfrespawn wf-panel-pi
 background = wfrespawn pcmanfm --desktop --profile LXDE-pi
@@ -155,6 +155,8 @@ while true; do
   sleep 10
 done
 EOF
+
+chmod +x /home/pi/switchtab.sh
 
 ## TODO turn machine display off at night
 ## TODO turn machine display on in morning
