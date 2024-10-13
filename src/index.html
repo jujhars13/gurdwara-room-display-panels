@@ -5,11 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
-    <title>Khalsa Ghar • Kitchen Dashboard</title>
+    <title>Gurdwara Display Panels</title>
     <meta name="description" content="A pure HTML example, without dependencies." />
 
     <!-- Pico.css -->
     <link rel="stylesheet" href="/static/css/pico.min.css" />
+    <link rel="stylesheet" href="/static/css/stylesn.css" />
 </head>
 
 <body>
@@ -43,10 +44,10 @@
     }, 1000 * 60);
 
     window.addEventListener("load", () => {
-        clock();
+        clock(document.getElementById("date-time"));
     });
 
-    function clock() {
+    function clock(element) {
         const today = new Date();
 
         // get time components
@@ -95,9 +96,9 @@
 
         //combine current date and time
         const dateTime = date + " - " + time;
+        element.innerHTML = dateTime;
 
         // print current date and time to the DOM
-        document.getElementById("date-time").innerHTML = dateTime;
         setTimeout(clock, 1000);
     }
 </script>

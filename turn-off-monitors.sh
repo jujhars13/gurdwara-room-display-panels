@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Script to turn monitor off/on
 #
 function _trigger-monitors-off-in-gnome-wayland()
